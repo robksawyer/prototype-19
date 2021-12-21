@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "component": "foldit -t src -c ",
-    "convert": "npx @react-three/gltfjsx -t ",
+    "convert": "npx @react-three/gltfjsx ",
     "build-storybook": "STORYBOOK_BASE_HREF=/storybook/ build-storybook -o ./storybook",
     "storybook": "start-storybook -p 6006"
   },
