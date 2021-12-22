@@ -52,10 +52,10 @@ const Scene = () => {
   const { scene, size } = useThree();
 
   const group = React.useRef();
-  const spotLight0 = React.useRef();
-  const spotLight1 = React.useRef();
-  const spotLight2 = React.useRef();
-  const spotLight3 = React.useRef();
+  const pointLight0 = React.useRef();
+  const pointLight1 = React.useRef();
+  const pointLight2 = React.useRef();
+  const pointLight3 = React.useRef();
 
   // useFrame(({ clock, mouse }) => {
   //   mesh.current.rotation.x = (Math.sin(clock.elapsedTime) * Math.PI) / 4;
@@ -72,48 +72,40 @@ const Scene = () => {
   //   );
   // });
 
-  useHelper(spotLight0, THREE.SpotLightHelper, 0.5, 'hotpink');
-  useHelper(spotLight1, THREE.SpotLightHelper, 0.5, 'hotpink');
-  useHelper(spotLight2, THREE.SpotLightHelper, 0.5, 'hotpink');
-  useHelper(spotLight3, THREE.SpotLightHelper, 0.5, 'hotpink');
+  useHelper(pointLight0, THREE.PointLightHelper, 0.5, 'hotpink');
+  useHelper(pointLight1, THREE.PointLightHelper, 0.5, 'hotpink');
+  useHelper(pointLight2, THREE.PointLightHelper, 0.5, 'hotpink');
+  useHelper(pointLight3, THREE.PointLightHelper, 0.5, 'hotpink');
   // useHelper(mesh, THREE.BoxHelper, '#272740');
   // useHelper(mesh, STDLIB.VertexNormalsHelper, 1, '#272740');
 
   return (
     <group>
-      <spotLight position={[-10, 0, -20]} color="lightblue" intensity={0.5} />
-      <group ref={group}>
-        <spotLight
-          ref={spotLight0}
+      <spotLight position={[-10, 0, -20]} color="lightblue" intensity={0.0} />
+      <group ref={group} position={[0, 27, 5]}>
+        <pointLight
+          ref={pointLight0}
           color="#0051FF"
-          position={[-4, 25, -5]}
-          intensity={0.5}
-          penumbra={0.5}
-          decay={5}
+          position={[-4, 0, -5]}
+          intensity={2.5}
         />
-        <spotLight
-          ref={spotLight1}
+        <pointLight
+          ref={pointLight1}
           color="#08FF88"
-          position={[4, 25, 5]}
-          intensity={0.5}
-          penumbra={0.75}
-          decay={5}
+          position={[4, 0, 5]}
+          intensity={2.5}
         />
-        <spotLight
-          ref={spotLight2}
+        <pointLight
+          ref={pointLight2}
           color="#FFF035"
-          position={[-4, 25, 5]}
-          intensity={0.5}
-          penumbra={0.25}
-          decay={5}
+          position={[-4, 0, 5]}
+          intensity={2.5}
         />
-        <spotLight
-          ref={spotLight3}
+        <pointLight
+          ref={pointLight3}
           color="#DF1CFF"
-          position={[5, 25, -3]}
-          intensity={0.5}
-          penumbra={0.5}
-          decay={5}
+          position={[5, 0, -3]}
+          intensity={2.5}
         />
       </group>
       <Stage
@@ -192,13 +184,12 @@ const MainScene = ({
           camera={{ fov: 45 }}
           // camera={{ position: [-5, 3, -10] }}
           // onCreated={({ gl }) => {
-          //   gl.physicallyCorrectLights = true;
-          //   // gl.toneMapping = THREE.ACESFilmicToneMapping
+          //   // gl.physicallyCorrectLights = true;
           //   gl.outputEncoding = THREE.sRGBEncoding;
           // }}
           performance={{ min: 0.2 }}
         >
-          <color attach="background" args={['#FE0081']} />
+          <color attach="background" args={['#001e4d']} />
           <fog args={['#101010', 10, 20]} />
           <React.Suspense
             fallback={
