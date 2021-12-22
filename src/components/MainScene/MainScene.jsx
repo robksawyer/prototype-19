@@ -4,9 +4,10 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import useErrorBoundary from 'use-error-boundary';
-
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Physics, Debug, usePlane } from '@react-three/cannon';
 
 import {
   useHelper,
@@ -32,10 +33,13 @@ import * as STDLIB from 'three-stdlib';
 
 import styles from './MainScene.module.css';
 
+import Controls from './Controls/Controls';
+
 import Loader from '@/components/Loader';
 import FoilBalloonZero from './FoilBalloonZero';
 import FoilBalloonTwo from './FoilBalloonTwo';
 import LamboUrus from '@/components/LamboUrus';
+import Player from '@/components/Player';
 
 // Shader stack
 import './shaders/defaultShaderMaterial';
@@ -47,6 +51,30 @@ import './shaders/defaultShaderMaterial';
 
 const ENABLE_HELPERS = 1;
 
+const Floor = props => {
+  const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }));
+
+  return (
+    <mesh ref={ref}>
+      <planeGeometry args={[170, 170]} />
+      <MeshReflectorMaterial
+        blur={[400, 100]}
+        resolution={512}
+        receiveShadow
+        mirror={0}
+        mixBlur={1}
+        mixStrength={2.5}
+        depthScale={1}
+        minDepthThreshold={0.8}
+        maxDepthThreshold={1}
+        color="#505050"
+        metalness={0.6}
+        roughness={1}
+      />
+    </mesh>
+  );
+};
+
 const Scene = () => {
   const mesh = React.useRef();
   const { scene, size } = useThree();
@@ -56,6 +84,18 @@ const Scene = () => {
   const pointLight1 = React.useRef();
   const pointLight2 = React.useRef();
   const pointLight3 = React.useRef();
+
+  // Vehicle
+  const useAICar = false;
+  const [selectedVertex, setSelectedVertex] = useState(null);
+  const player = useMemo(
+    () => (useAICar ? new AICar() : new Car()),
+    [useAICar],
+  );
+  const onSetGauges = _.throttle(value => {
+    console.log('value', value);
+  }, 200);
+  //
 
   // useFrame(({ clock, mouse }) => {
   //   mesh.current.rotation.x = (Math.sin(clock.elapsedTime) * Math.PI) / 4;
@@ -120,30 +160,24 @@ const Scene = () => {
           <FoilBalloonTwo position={[4, -3, 0]} />
           <FoilBalloonTwo position={[8.5, -3, 0]} />
         </group>
-
-        <LamboUrus
+        {/* <LamboUrus
           position={[0, -2, 0]}
           rotation={[0, 1, 0]}
           scale={[0.05, 0.05, 0.05]}
+        /> */}
+        <Player
+          player={player}
+          selectedVertex={selectedVertex}
+          mode={mode}
+          currentDNA={currentDNA}
+          setGauges={onSetGauges}
+          time={'sunset'}
+          obstacles={[]}
+          useAICar={useAICar}
+          quality={quality}
         />
       </Stage>
-      <mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[170, 170]} />
-        <MeshReflectorMaterial
-          blur={[400, 100]}
-          resolution={512}
-          receiveShadow
-          mirror={0}
-          mixBlur={1}
-          mixStrength={2.5}
-          depthScale={1}
-          minDepthThreshold={0.8}
-          maxDepthThreshold={1}
-          color="#505050"
-          metalness={0.6}
-          roughness={1}
-        />
-      </mesh>
+      <Floor position={[0, 0, 0]} />
     </group>
   );
 };
@@ -177,45 +211,54 @@ const MainScene = ({
     >
       <Stats showPanel={0} className="ml-0" />
       <ErrorBoundary>
-        {/* https://github.com/pmndrs/react-three-fiber/blob/master/markdown/api.md#canvas */}
         <Canvas
           dpr={[1, 2]}
           shadows
           camera={{ fov: 45 }}
-          // camera={{ position: [-5, 3, -10] }}
-          // onCreated={({ gl }) => {
-          //   // gl.physicallyCorrectLights = true;
-          //   gl.outputEncoding = THREE.sRGBEncoding;
-          // }}
           performance={{ min: 0.2 }}
         >
-          <color attach="background" args={['#001e4d']} />
-          <fog args={['#101010', 10, 20]} />
-          <React.Suspense
-            fallback={
-              <Html center lang="en">
-                <Loader />
-              </Html>
-            }
+          <Physics
+            gravity={[0, -10, 0]}
+            broadphase="SAP"
+            allowSleep
+            shouldInvalidate={false}
           >
-            <Clouds />
-            <PresentationControls
-              speed={1.5}
-              global
-              zoom={0.7}
-              polar={[-0.1, Math.PI / 4]}
+            <Debug color="black" scale={1.1} />
+            <color attach="background" args={['#001e4d']} />
+            <fog args={['#101010', 10, 20]} />
+
+            <Controls
+              cameraLock={cameraLock}
+              player={player}
+              isPaused={isPaused}
+            />
+
+            <React.Suspense
+              fallback={
+                <Html center lang="en">
+                  <Loader />
+                </Html>
+              }
             >
-              <Scene />
-            </PresentationControls>
+              <Clouds />
+              <PresentationControls
+                speed={1.5}
+                global
+                zoom={0.7}
+                polar={[-0.1, Math.PI / 4]}
+              >
+                <Scene />
+              </PresentationControls>
 
-            <Environment path="/3d/models/lambo_urus/textures/cube" />
-          </React.Suspense>
+              <Environment path="/3d/models/lambo_urus/textures/cube" />
+            </React.Suspense>
 
-          {/* <Effects /> */}
+            {/* <Effects /> */}
 
-          <AdaptiveDpr pixelated />
-          <AdaptiveEvents />
-          {/* <OrbitControls regress /> */}
+            <AdaptiveDpr pixelated />
+            <AdaptiveEvents />
+            {/* <OrbitControls regress /> */}
+          </Physics>
         </Canvas>
       </ErrorBoundary>
     </main>

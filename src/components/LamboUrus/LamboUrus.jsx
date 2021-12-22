@@ -17,14 +17,14 @@ import { useGLTF } from '@react-three/drei';
 import styles from './LamboUrus.module.css';
 
 import { useLayoutEffect } from '@/hooks/useIsoLayoutEffect';
-import { usePersonControls } from '@/hooks/usePersonControls';
+import { useControls } from '@/hooks/useControls';
 
 export default function LamboUrus(props) {
   const group = React.useRef();
   const brakeDisc0 = React.useRef();
   const { nodes, materials } = useGLTF('/3d/models/lambo_urus/lambo_urus.glb');
 
-  const { forward, backward, left, right, jump } = usePersonControls();
+  const { forward, backward, left, right, jump } = useControls();
 
   const handleKeyDown = React.useCallback(({ key }) => {
     console.log('key', key);
