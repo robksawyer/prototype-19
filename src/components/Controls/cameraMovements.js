@@ -148,6 +148,9 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
     }
   });
 
+  /**
+   * move
+   */
   const move = () => {
     if (linearProgress.current < 1) {
       linearProgress.current += 0.01;
@@ -166,6 +169,11 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
       else movement.current = false;
     }
   };
+
+  /**
+   * follow
+   * @returns
+   */
   const follow = () => {
     if (!player.followCam) return;
     camera.position.lerp(

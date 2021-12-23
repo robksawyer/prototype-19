@@ -34,6 +34,7 @@ import * as STDLIB from 'three-stdlib';
 import styles from './MainScene.module.css';
 
 import { useStore } from '@/store';
+import { useLayoutEffect } from '@/hooks/useIsoLayoutEffect';
 
 import Roads from '@/components/Roads';
 // import Ghost from '@/components/Ghost';
@@ -183,7 +184,13 @@ const MainScene = ({
   variant = 'default',
 }) => {
   const { ErrorBoundary, didCatch, error } = useErrorBoundary();
-  const { useAIEngine, newObstacle, addObstacles } = useStore();
+  const {
+    useAIEngine,
+    newObstacle,
+    addObstacles,
+    enableCameraLock,
+    cameraLock,
+  } = useStore();
 
   // Vehicle
   const [selectedVertex, setSelectedVertex] = React.useState(null);
@@ -218,7 +225,7 @@ const MainScene = ({
         <Canvas
           dpr={[1, 2]}
           shadows
-          camera={{ fov: 4000 }}
+          camera={{ fov: 4000, position: [0, 6, -15] }}
           performance={{ min: 0.2 }}
           frameloop={'on demand'}
         >
@@ -230,7 +237,7 @@ const MainScene = ({
           >
             <Stats showPanel={0} className="ml-0" />
             <Debug color="black" scale={1.1} />
-            <color attach="background" args={['#000000']} />
+            <color attach="background" args={[0xa0a0a0]} />
             <fog args={['#101010', 10, 20]} />
 
             <Clouds />
