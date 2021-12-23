@@ -8,12 +8,6 @@ import _ from 'lodash';
 import useErrorBoundary from 'use-error-boundary';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Physics, Debug, usePlane } from '@react-three/cannon';
-
-import Roads from '@/components/Roads';
-// import Ghost from '@/components/Ghost';
-import Engine from '@/components/Vehicle/Engine';
-import AIEngine from '@/components/Vehicle/AI/AIEngine';
-
 import {
   useHelper,
   Html,
@@ -27,6 +21,7 @@ import {
   Environment,
   PresentationControls,
   MeshReflectorMaterial,
+  Sky,
 } from '@react-three/drei';
 import * as STDLIB from 'three-stdlib';
 // Enabled for effects
@@ -40,6 +35,10 @@ import styles from './MainScene.module.css';
 
 import { useStore } from '@/store';
 
+import Roads from '@/components/Roads';
+// import Ghost from '@/components/Ghost';
+import Engine from '@/components/Vehicle/Engine';
+import AIEngine from '@/components/Vehicle/AI/AIEngine';
 import Loader from '@/components/Loader';
 import FoilBalloonZero from './FoilBalloonZero';
 import FoilBalloonTwo from './FoilBalloonTwo';
@@ -97,11 +96,7 @@ const Baloons = ({}) => {
   );
 };
 
-const Scene = ({
-  player,
-
-  selectedVertex,
-}) => {
+const Lights = ({}) => {
   const group = React.useRef();
   const pointLight0 = React.useRef();
   const pointLight1 = React.useRef();
@@ -112,11 +107,9 @@ const Scene = ({
   useHelper(pointLight1, THREE.PointLightHelper, 0.5, 'hotpink');
   useHelper(pointLight2, THREE.PointLightHelper, 0.5, 'hotpink');
   useHelper(pointLight3, THREE.PointLightHelper, 0.5, 'hotpink');
-  // useHelper(mesh, THREE.BoxHelper, '#272740');
-  // useHelper(mesh, STDLIB.VertexNormalsHelper, 1, '#272740');
 
   return (
-    <group>
+    <>
       <spotLight position={[-10, 0, -20]} color="lightblue" intensity={0.0} />
       <group ref={group} position={[0, 27, 5]}>
         <pointLight
@@ -144,6 +137,21 @@ const Scene = ({
           intensity={2.5}
         />
       </group>
+    </>
+  );
+};
+
+const Scene = ({
+  player,
+
+  selectedVertex,
+}) => {
+  // useHelper(mesh, THREE.BoxHelper, '#272740');
+  // useHelper(mesh, STDLIB.VertexNormalsHelper, 1, '#272740');
+
+  return (
+    <group>
+      <Lights />
 
       {/* <LamboUrus
           position={[0, -2, 0]}
@@ -175,19 +183,7 @@ const MainScene = ({
   variant = 'default',
 }) => {
   const { ErrorBoundary, didCatch, error } = useErrorBoundary();
-  const {
-    mode,
-    currentDNA,
-    time,
-    obstacles,
-    useAIEngine,
-    quality,
-    cameraLock,
-    isPaused,
-    setGauges,
-    newObstacle,
-    addObstacles,
-  } = useStore();
+  const { useAIEngine, newObstacle, addObstacles } = useStore();
 
   // Vehicle
   const [selectedVertex, setSelectedVertex] = React.useState(null);
@@ -234,8 +230,16 @@ const MainScene = ({
           >
             <Stats showPanel={0} className="ml-0" />
             <Debug color="black" scale={1.1} />
-            <color attach="background" args={['#001e4d']} />
+            <color attach="background" args={['#000000']} />
             <fog args={['#101010', 10, 20]} />
+
+            <Clouds />
+            <Sky
+              distance={450000}
+              sunPosition={[0, 1, 0]}
+              inclination={0}
+              azimuth={0.25}
+            />
 
             <Controls player={player} />
 
@@ -251,7 +255,7 @@ const MainScene = ({
                 setSelectedVertex={setSelectedVertex}
                 onNewObstacle={onNewObstacle}
               />
-              <Clouds />
+
               <Scene player={player} selectedVertex={selectedVertex} />
               <Environment path="/3d/models/lambo_urus/textures/cube" />
             </React.Suspense>
