@@ -5,16 +5,16 @@ import * as React from 'react';
 import { useKeyboardControls } from './useKeyboardControls';
 import { useMouseControls } from './useMouseControls';
 
+import { useStore } from '@/store';
+
 export const useVehicleControls = (
   chassisRef,
   vehicleRef,
   playerRef,
-  mode,
-  setGauges,
   selectedVertex,
-  currentDNA,
-  useAIEngine,
 ) => {
+  const { mode, useAIEngine, currentDNA, setGauges } = useStore();
+
   const resetPosition = React.useCallback(() => {
     chassisRef.current.api.position.set(147.5, 4, 192.5);
     chassisRef.current.api.angularVelocity.set(0, 0, 0);
@@ -32,13 +32,13 @@ export const useVehicleControls = (
     clearPath();
   }, [clearPath, resetPosition]);
 
-  useKeyboardControls(mode, vehicleRef, reset, setGauges);
+  useKeyboardControls(vehicleRef, reset);
 
-  useMouseControls(selectedVertex, playerRef, mode, vehicleRef, setGauges);
+  useMouseControls(selectedVertex, playerRef, vehicleRef);
 
   React.useEffect(() => {
     resetPosition();
-    // if (!currentDNA) return;
-    // playerRef.current.updateDNA?.(currentDNA);
+    if (!currentDNA) return;
+    playerRef.current.updateDNA?.(currentDNA);
   }, [playerRef, currentDNA, resetPosition, useAIEngine]);
 };

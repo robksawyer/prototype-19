@@ -4,14 +4,10 @@
 
 import * as React from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useStore } from '@/store';
 
-export const useMouseControls = (
-  selectedVertex,
-  playerRef,
-  mode,
-  vehicleRef,
-  setGauges,
-) => {
+export const useMouseControls = (selectedVertex, playerRef, vehicleRef) => {
+  const { mode, setGauges } = useStore();
   const prevVertex = React.useRef();
   React.useEffect(() => {
     if (mode === 'keyboard') {

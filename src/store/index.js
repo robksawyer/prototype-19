@@ -35,7 +35,7 @@ export const useStore = create(set => ({
   vehicleDimensions: [1.7, 1, 4],
 
   gauges: null,
-  mode: 'mouse',
+  mode: 'keyboard',
   stats: false,
   quality: +localStorage.getItem('quality') ?? false,
   addRoadWorks: false,

@@ -99,13 +99,8 @@ const Baloons = ({}) => {
 
 const Scene = ({
   player,
-  time = 'sunset',
-  mode = 'keyboard',
-  obstacles = [],
-  quality = 3,
-  useAIEngine,
+
   selectedVertex,
-  setGauges,
 }) => {
   const group = React.useRef();
   const pointLight0 = React.useRef();
@@ -261,17 +256,7 @@ const MainScene = ({
                 onNewObstacle={onNewObstacle}
               />
               <Clouds />
-              <Scene
-                player={player}
-                selectedVertex={selectedVertex}
-                mode={mode}
-                currentDNA={currentDNA}
-                setGauges={onSetGauges}
-                time={time}
-                obstacles={obstacles}
-                useAIEngine={useAIEngine}
-                quality={quality}
-              />
+              <Scene player={player} selectedVertex={selectedVertex} />
               <Environment path="/3d/models/lambo_urus/textures/cube" />
             </React.Suspense>
 

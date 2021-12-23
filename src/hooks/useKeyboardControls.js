@@ -3,6 +3,7 @@
  */
 import * as React from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useStore } from '@/store';
 
 /**
  * useKeyPress
@@ -36,13 +37,8 @@ function useKeyPress(target, mode) {
   return keyPressed;
 }
 
-export const useKeyboardControls = (
-  mode,
-  vehicleRef,
-  resetPosition,
-  clearPath,
-  setGauges,
-) => {
+export const useKeyboardControls = (vehicleRef, resetPosition, clearPath) => {
+  const { mode, setGauges } = useStore();
   const forward = useKeyPress('w', mode);
   const backward = useKeyPress('s', mode);
   const left = useKeyPress('a', mode);
@@ -50,7 +46,7 @@ export const useKeyboardControls = (
   const forwardArrow = useKeyPress('ArrowUp', mode);
   const backwardArrow = useKeyPress('ArrowDown', mode);
   const leftArrow = useKeyPress('ArrowLeft', mode);
-  const leftRight = useKeyPress('ArrowRight', mode);
+  const rightArrow = useKeyPress('ArrowRight', mode);
   const brake = useKeyPress(' ', mode); // space bar
   const reset = useKeyPress('r', 'keyboard');
 
@@ -64,9 +60,9 @@ export const useKeyboardControls = (
     let steering = 0;
     let braking = 0;
     let engine = 0;
-    if (left || (leftRight && !right && !rightArrow)) {
+    if ((left || leftArrow) && !right && !rightArrow) {
       steering = 0.5;
-    } else if (right || (rightArrow && !left && !leftArrow)) {
+    } else if ((right || rightArrow) && !left && !leftArrow) {
       steering = -0.5;
     }
 
@@ -79,7 +75,7 @@ export const useKeyboardControls = (
     if (brake) {
       braking = 50;
     }
-    console.log('vehicleRef.current.api', vehicleRef.current.api);
+
     vehicleRef.current.api.applyEngineForce(engine, 2);
     vehicleRef.current.api.applyEngineForce(engine, 3);
 
@@ -89,6 +85,7 @@ export const useKeyboardControls = (
     for (let i = 0; i < 4; i++) {
       vehicleRef.current.api.setBrake(braking, i);
     }
+
     setGauges({
       steering: -steering * 2,
       accel: braking ? -1 : engine ? -engine / 1500 : 0,

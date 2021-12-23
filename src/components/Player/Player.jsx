@@ -5,7 +5,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import PlayerPath from './Path/PlayerPath';
-// import ClickIndicator from "./ClickVisuals";
+import ClickIndicator from './ClickVisuals';
 
 import Vehicle from '@/components/Vehicle';
 
@@ -22,20 +22,9 @@ const Player = ({ selectedVertex, player }) => {
   const followCameraRef = React.useRef();
   const vehicleRef = React.useRef();
 
-  const { mode, useAIEngine, currentDNA, setGauges } = useStore();
-
   useSubscriptions(playerRef, chassisRef);
 
-  useVehicleControls(
-    chassisRef,
-    vehicleRef,
-    playerRef,
-    mode,
-    setGauges,
-    selectedVertex,
-    currentDNA,
-    useAIEngine,
-  );
+  useVehicleControls(chassisRef, vehicleRef, playerRef, selectedVertex);
 
   React.useEffect(() => {
     playerRef.current = player;
@@ -54,7 +43,7 @@ const Player = ({ selectedVertex, player }) => {
         rotation={[0, Math.PI, 0]}
       />
       <PlayerPath player={player} />
-      {/* <ClickIndicator selectedVertex={selectedVertex} /> */}
+      <ClickIndicator selectedVertex={selectedVertex} />
     </>
   );
 };
