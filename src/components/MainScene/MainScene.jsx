@@ -9,6 +9,8 @@ import useErrorBoundary from 'use-error-boundary';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Physics, Debug, usePlane } from '@react-three/cannon';
 
+import Roads from '@/components/Roads';
+// import Ghost from '@/components/Ghost';
 import Engine from '@/components/Vehicle/Engine';
 import AIEngine from '@/components/Vehicle/AI/AIEngine';
 
@@ -77,45 +79,37 @@ const Floor = props => {
   );
 };
 
+/**
+ * 2022 baloons
+ * @param {*} param0
+ * @returns
+ */
+const Baloons = ({}) => {
+  return (
+    <group position={[0, 5, 0]}>
+      <FoilBalloonTwo position={[-4, -3, 0]} />
+      <FoilBalloonZero position={[0, -3, 0]} />
+      <FoilBalloonTwo position={[4, -3, 0]} />
+      <FoilBalloonTwo position={[8.5, -3, 0]} />
+    </group>
+  );
+};
+
 const Scene = ({
   player,
   time = 'sunset',
   mode = 'keyboard',
   obstacles = [],
   quality = 3,
+  useAICar,
+  selectedVertex,
+  setGauges,
 }) => {
-  const mesh = React.useRef();
-  const { scene, size } = useThree();
-
   const group = React.useRef();
   const pointLight0 = React.useRef();
   const pointLight1 = React.useRef();
   const pointLight2 = React.useRef();
   const pointLight3 = React.useRef();
-
-  // Vehicle
-  const useAICar = false;
-  const [selectedVertex, setSelectedVertex] = React.useState(null);
-
-  const onSetGauges = _.throttle(value => {
-    console.log('value', value);
-  }, 200);
-  //
-
-  // useFrame(({ clock, mouse }) => {
-  //   mesh.current.rotation.x = (Math.sin(clock.elapsedTime) * Math.PI) / 4;
-  //   mesh.current.rotation.y = (Math.sin(clock.elapsedTime) * Math.PI) / 4;
-  //   mesh.current.rotation.z = (Math.sin(clock.elapsedTime) * Math.PI) / 4;
-  //   mesh.current.position.x = Math.sin(clock.elapsedTime);
-  //   mesh.current.position.z = Math.sin(clock.elapsedTime);
-  //   group.current.rotation.y += 0.02;
-
-  //   mesh.current.material.uniforms.iTime.value = clock.getElapsedTime();
-  //   mesh.current.material.uniforms.iMouse.value = new THREE.Vector2(
-  //     mouse.x,
-  //     mouse.y,
-  //   );
-  // });
 
   useHelper(pointLight0, THREE.PointLightHelper, 0.5, 'hotpink');
   useHelper(pointLight1, THREE.PointLightHelper, 0.5, 'hotpink');
@@ -153,36 +147,26 @@ const Scene = ({
           intensity={2.5}
         />
       </group>
-      <Stage
-        environment={null}
-        intensity={1}
-        contactShadow={false}
-        shadowBias={-0.0015}
-      >
-        <group position={[0, 5, 0]}>
-          <FoilBalloonTwo position={[-4, -3, 0]} />
-          <FoilBalloonZero position={[0, -3, 0]} />
-          <FoilBalloonTwo position={[4, -3, 0]} />
-          <FoilBalloonTwo position={[8.5, -3, 0]} />
-        </group>
-        {/* <LamboUrus
+
+      {/* <LamboUrus
           position={[0, -2, 0]}
           rotation={[0, 1, 0]}
           scale={[0.05, 0.05, 0.05]}
         /> */}
-        <Player
-          player={player}
-          selectedVertex={selectedVertex}
-          mode={mode}
-          // currentDNA={currentDNA}
-          setGauges={onSetGauges}
-          time={time}
-          obstacles={obstacles}
-          useAICar={useAICar}
-          quality={quality}
-        />
-      </Stage>
-      <Floor position={[0, 0, 0]} />
+      <Player
+        player={player}
+        selectedVertex={selectedVertex}
+        mode={mode}
+        // currentDNA={currentDNA}
+        setGauges={setGauges}
+        time={time}
+        obstacles={obstacles}
+        useAICar={useAICar}
+        quality={quality}
+      />
+      {/* {ghosts.map((ghostDNA, index) => (
+        <Ghost key={index} ghostDNA={ghostDNA} />
+      ))} */}
     </group>
   );
 };
@@ -202,11 +186,28 @@ const Clouds = () => {
 const MainScene = ({
   className = 'fixed top-0 left-0 w-screen h-screen',
   variant = 'default',
+  time = 'sunset',
+  mode = 'keyboard',
+  obstacles = [],
+  quality = 3,
   cameraLock = false,
   isPaused = false,
   useAICar = false,
+  addObstacles = false,
+  // currentDNA
 }) => {
   const { ErrorBoundary, didCatch, error } = useErrorBoundary();
+
+  // Vehicle
+  const [selectedVertex, setSelectedVertex] = React.useState(null);
+
+  const onNewObstacle = React.useCallback(value => {
+    // console.log('value', value);
+  }, []);
+
+  const onSetGauges = _.throttle(value => {
+    // console.log('value', value);
+  }, 200);
 
   const player = React.useMemo(
     () => (useAICar ? new AIEngine() : new Engine()),
@@ -222,13 +223,13 @@ const MainScene = ({
         maxHeight: `calc(100vh - 50px)`,
       }}
     >
-      <Stats showPanel={0} className="ml-0" />
       <ErrorBoundary>
         <Canvas
           dpr={[1, 2]}
           shadows
-          camera={{ fov: 45 }}
+          camera={{ fov: 4000 }}
           performance={{ min: 0.2 }}
+          frameloop={'on demand'}
         >
           <Physics
             gravity={[0, -10, 0]}
@@ -236,9 +237,10 @@ const MainScene = ({
             allowSleep
             shouldInvalidate={false}
           >
-            <Debug color="black" scale={1.1} />
-            <color attach="background" args={['#001e4d']} />
-            <fog args={['#101010', 10, 20]} />
+            <Stats showPanel={0} className="ml-0" />
+            {/* <Debug color="black" scale={1.1} /> */}
+            {/* <color attach="background" args={['#001e4d']} />
+            <fog args={['#101010', 10, 20]} /> */}
 
             <Controls
               cameraLock={cameraLock}
@@ -253,16 +255,23 @@ const MainScene = ({
                 </Html>
               }
             >
+              <Roads
+                addObstacles={addObstacles}
+                setSelectedVertex={setSelectedVertex}
+                onNewObstacle={onNewObstacle}
+              />
               <Clouds />
-              <PresentationControls
-                speed={1.5}
-                global
-                zoom={0.7}
-                polar={[-0.1, Math.PI / 4]}
-              >
-                <Scene useAICar={useAICar} player={player} />
-              </PresentationControls>
-
+              <Scene
+                player={player}
+                selectedVertex={selectedVertex}
+                mode={mode}
+                // currentDNA={currentDNA}
+                setGauges={onSetGauges}
+                time={time}
+                obstacles={obstacles}
+                useAICar={useAICar}
+                quality={quality}
+              />
               <Environment path="/3d/models/lambo_urus/textures/cube" />
             </React.Suspense>
 

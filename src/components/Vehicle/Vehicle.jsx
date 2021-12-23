@@ -39,6 +39,8 @@ const Vehicle = ({
     vehicleRef,
   );
 
+  console.log('api', api);
+
   return (
     <group ref={vehicleRef} api={api}>
       <Chassis
