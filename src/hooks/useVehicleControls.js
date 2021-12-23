@@ -32,7 +32,7 @@ export const useVehicleControls = (
     clearPath();
   }, [clearPath, resetPosition]);
 
-  useKeyboardControls(vehicleRef, reset);
+  useKeyboardControls(vehicleRef, reset, clearPath);
 
   useMouseControls(selectedVertex, playerRef, vehicleRef);
 
