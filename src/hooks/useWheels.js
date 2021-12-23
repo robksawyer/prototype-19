@@ -6,13 +6,14 @@
 import * as React from 'react';
 
 export const useWheels = (
-  details = {
+  chassis = {
     // chassis - wheel connection helpers
     chassisWidth: 1.6,
     chassisHeight: -0.15, // ground clearance
     chassisFront: 1.3,
     chassisBack: -1.35,
-
+  },
+  details = {
     radius: 0.3,
     directionLocal: [0, -1, 0], // same as Physics gravity
     suspensionStiffness: 30,
@@ -35,11 +36,11 @@ export const useWheels = (
   const wheel_3 = React.useRef();
   const wheel_4 = React.useRef();
 
-  const { chassisWidth, chassisHeight, chassisFront, chassisBack } = details;
+  const { chassisWidth, chassisHeight, chassisFront, chassisBack } = chassis;
 
   // wheels
   const wheels = React.useMemo(() => [wheel_1, wheel_2, wheel_3, wheel_4], []);
-  const wheelData = React.useMemo(() => {
+  const wheelInfos = React.useMemo(() => {
     // FrontLeft [-X,Y,Z]
     const wheelDetail_1 = {
       ...details,
@@ -80,8 +81,9 @@ export const useWheels = (
       ],
       isFrontWheel: false,
     };
+
     return [wheelDetail_1, wheelDetail_2, wheelDetail_3, wheelDetail_4];
   }, [chassisBack, chassisFront, chassisHeight, chassisWidth, details]);
 
-  return [wheels, wheelData];
+  return [wheels, wheelInfos];
 };

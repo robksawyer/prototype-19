@@ -38,6 +38,8 @@ import * as STDLIB from 'three-stdlib';
 
 import styles from './MainScene.module.css';
 
+import { useStore } from '@/store';
+
 import Loader from '@/components/Loader';
 import FoilBalloonZero from './FoilBalloonZero';
 import FoilBalloonTwo from './FoilBalloonTwo';
@@ -101,7 +103,7 @@ const Scene = ({
   mode = 'keyboard',
   obstacles = [],
   quality = 3,
-  useAICar,
+  useAIEngine,
   selectedVertex,
   setGauges,
 }) => {
@@ -153,17 +155,7 @@ const Scene = ({
           rotation={[0, 1, 0]}
           scale={[0.05, 0.05, 0.05]}
         /> */}
-      <Player
-        player={player}
-        selectedVertex={selectedVertex}
-        mode={mode}
-        // currentDNA={currentDNA}
-        setGauges={setGauges}
-        time={time}
-        obstacles={obstacles}
-        useAICar={useAICar}
-        quality={quality}
-      />
+      <Player player={player} selectedVertex={selectedVertex} />
       {/* {ghosts.map((ghostDNA, index) => (
         <Ghost key={index} ghostDNA={ghostDNA} />
       ))} */}
@@ -186,32 +178,40 @@ const Clouds = () => {
 const MainScene = ({
   className = 'fixed top-0 left-0 w-screen h-screen',
   variant = 'default',
-  time = 'sunset',
-  mode = 'keyboard',
-  obstacles = [],
-  quality = 3,
-  cameraLock = false,
-  isPaused = false,
-  useAICar = false,
-  addObstacles = false,
-  // currentDNA
 }) => {
   const { ErrorBoundary, didCatch, error } = useErrorBoundary();
+  const {
+    mode,
+    currentDNA,
+    time,
+    obstacles,
+    useAIEngine,
+    quality,
+    cameraLock,
+    isPaused,
+    setGauges,
+    newObstacle,
+    addObstacles,
+  } = useStore();
 
   // Vehicle
   const [selectedVertex, setSelectedVertex] = React.useState(null);
 
-  const onNewObstacle = React.useCallback(value => {
-    // console.log('value', value);
-  }, []);
+  const onNewObstacle = React.useCallback(
+    value => {
+      // console.log('value', value);
+      newObstacle(value);
+    },
+    [newObstacle],
+  );
 
   const onSetGauges = _.throttle(value => {
-    // console.log('value', value);
+    // setGauges(value);
   }, 200);
 
   const player = React.useMemo(
-    () => (useAICar ? new AIEngine() : new Engine()),
-    [useAICar],
+    () => (useAIEngine ? new AIEngine() : new Engine()),
+    [useAIEngine],
   );
 
   return (
@@ -238,9 +238,9 @@ const MainScene = ({
             shouldInvalidate={false}
           >
             <Stats showPanel={0} className="ml-0" />
-            {/* <Debug color="black" scale={1.1} /> */}
-            {/* <color attach="background" args={['#001e4d']} />
-            <fog args={['#101010', 10, 20]} /> */}
+            <Debug color="black" scale={1.1} />
+            <color attach="background" args={['#001e4d']} />
+            <fog args={['#101010', 10, 20]} />
 
             <Controls
               cameraLock={cameraLock}
@@ -265,11 +265,11 @@ const MainScene = ({
                 player={player}
                 selectedVertex={selectedVertex}
                 mode={mode}
-                // currentDNA={currentDNA}
+                currentDNA={currentDNA}
                 setGauges={onSetGauges}
                 time={time}
                 obstacles={obstacles}
-                useAICar={useAICar}
+                useAIEngine={useAIEngine}
                 quality={quality}
               />
               <Environment path="/3d/models/lambo_urus/textures/cube" />

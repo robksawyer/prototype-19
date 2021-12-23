@@ -14,22 +14,15 @@ import { useVehicleControls } from '@/hooks/useVehicleControls';
 
 import styles from './Player.module.css';
 
-const Player = ({
-  selectedVertex,
-  mode,
-  player,
-  setGauges,
-  currentDNA,
-  time,
-  obstacles = [],
-  useAICar,
-  quality = 3,
-}) => {
-  const playerRef = React.useRef(player);
+import { useStore } from '@/store';
 
+const Player = ({ selectedVertex, player }) => {
+  const playerRef = React.useRef(player);
   const chassisRef = React.useRef();
   const followCameraRef = React.useRef();
   const vehicleRef = React.useRef();
+
+  const { mode, useAIEngine, currentDNA, setGauges } = useStore();
 
   useSubscriptions(playerRef, chassisRef);
 
@@ -41,7 +34,7 @@ const Player = ({
     setGauges,
     selectedVertex,
     currentDNA,
-    useAICar,
+    useAIEngine,
   );
 
   React.useEffect(() => {
@@ -59,9 +52,6 @@ const Player = ({
         position={[147.5, 4, 192.5]}
         angularVelocity={[0, 0, 0]}
         rotation={[0, Math.PI, 0]}
-        time={time}
-        obstacles={obstacles}
-        quality={quality}
       />
       <PlayerPath player={player} />
       {/* <ClickIndicator selectedVertex={selectedVertex} /> */}

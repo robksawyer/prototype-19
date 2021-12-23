@@ -39,40 +39,47 @@ function useKeyPress(target, mode) {
 export const useKeyboardControls = (
   mode,
   vehicleRef,
-  resetCallback,
+  resetPosition,
+  clearPath,
   setGauges,
 ) => {
   const forward = useKeyPress('w', mode);
   const backward = useKeyPress('s', mode);
   const left = useKeyPress('a', mode);
   const right = useKeyPress('d', mode);
+  const forwardArrow = useKeyPress('ArrowUp', mode);
+  const backwardArrow = useKeyPress('ArrowDown', mode);
+  const leftArrow = useKeyPress('ArrowLeft', mode);
+  const leftRight = useKeyPress('ArrowRight', mode);
   const brake = useKeyPress(' ', mode); // space bar
   const reset = useKeyPress('r', 'keyboard');
 
   useFrame(() => {
     if (reset) {
-      resetCallback();
+      resetPosition();
+      clearPath();
     }
     if (mode !== 'keyboard' || !vehicleRef.current?.api) return;
 
     let steering = 0;
     let braking = 0;
     let engine = 0;
-    if (left && !right) {
+    if (left || (leftRight && !right && !rightArrow)) {
       steering = 0.5;
-    } else if (right && !left) {
+    } else if (right || (rightArrow && !left && !leftArrow)) {
       steering = -0.5;
     }
 
-    if (forward && !backward) {
+    if ((forward || forwardArrow) && !backward && !backwardArrow) {
       engine = -1500;
-    } else if (backward && !forward) {
+    } else if ((backward || backwardArrow) && !forward && !forwardArrow) {
       engine = 1500;
     }
 
     if (brake) {
       braking = 50;
     }
+    console.log('vehicleRef.current.api', vehicleRef.current.api);
     vehicleRef.current.api.applyEngineForce(engine, 2);
     vehicleRef.current.api.applyEngineForce(engine, 3);
 

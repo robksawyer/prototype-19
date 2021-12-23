@@ -8,22 +8,19 @@ import AstonHQ from './AstonHQ';
 import AstonLQ from './AstonLQ';
 import Radar from './Radar/Radar';
 
+import { useStore } from '@/store';
+
 export default function Chassis({
   rotation,
   position,
   angularVelocity,
   followCameraRef,
   chassisRef,
-  time,
   playerRef,
-  obstacles,
-  quality = 3,
 }) {
   const spotlightTarget = React.useRef();
   const [target, setTarget] = React.useState(undefined);
-
-  // IMPORTANT: Set the car's visual dimensions (roughly)
-  const boxSize = [1.7, 1, 4];
+  const { vehicleDimensions: boxSize, quality, obstacles, time } = useStore();
 
   const [, api] = useBox(
     () => ({

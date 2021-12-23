@@ -30,6 +30,10 @@ const defaultSettings = {
  */
 export const useStore = create(set => ({
   loading: false,
+
+  // IMPORTANT: Set the car's visual dimensions (roughly)
+  vehicleDimensions: [1.7, 1, 4],
+
   gauges: null,
   mode: 'mouse',
   stats: false,
@@ -45,7 +49,6 @@ export const useStore = create(set => ({
   trafficConditions: false,
   time: 'sunset',
   obstacles: [],
-  addObstacles: false,
   AICar: false,
   helpOpen: false,
 
@@ -59,8 +62,10 @@ export const useStore = create(set => ({
       localStorage.setItem('quality', value);
       state.quality = value;
     }),
+
   setQuality: value => set(state => ({ gauges: value })),
-  setgauges: value => set(state => ({ gauges: value })),
+
+  setGauges: value => set(state => ({ gauges: value })),
 
   //   mode
   mouseMode: value => set(state => ({ mode: 'mouse' })),
@@ -85,51 +90,62 @@ export const useStore = create(set => ({
     set(state => ({
       cameraLock: !state.cameraLock,
     })),
+
   enableCameraLock: value =>
     set(state => ({
       cameraLock: true,
     })),
+
   toggleCollisionBoxes: value =>
     set(state => ({
       collisionBoxes: !state.collisionBoxes,
     })),
+
   toggleTrafficConditions: value =>
     set(state => ({
       trafficConditions: !state.trafficConditions,
     })),
+
   changeComputerNumber: value =>
     set(state => ({
       computerNumber: value,
     })),
+
   toggleTime: value =>
     set(state => {
       if (state.time === 'day') state.time = 'sunset';
       else if (state.time === 'sunset') state.time = 'night';
       else if (state.time === 'night') state.time = 'day';
     }),
+
   addObstacles: value =>
     set(state => {
       const payload = value || !state.addObstacles;
-      state.addObstacles = payload;
+      state.obstacles = payload;
     }),
+
   newObstacle: value =>
     set(state => {
       state.obstacles.push(value);
     }),
+
   removeObstacles: value =>
     set(state => ({
       obstacles: [],
     })),
+
   toggleAICar: value =>
     set(state => {
       state.AICar = !state.AICar;
-      state.addObstacles = false;
+      //   state.addObstacles = false;
       state.obstacles = [];
     }),
-  disableAICar: value =>
+
+  disableAIEngine: value =>
     set(state => ({
       AICar: false,
     })),
+
   toggleHelpOpen: value =>
     set(state => ({
       helpOpen: !state.helpOpen,
@@ -141,10 +157,12 @@ export const useStore = create(set => ({
       const dna = value || defaultSettings;
       state.currentDNA = dna;
     }),
+
   toggleTraining: value =>
     set(state => ({
       training: !state.training,
     })),
+
   updateGhosts: value =>
     set(state => ({
       ghosts: value,

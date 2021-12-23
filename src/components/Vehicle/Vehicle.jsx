@@ -19,27 +19,23 @@ const Vehicle = ({
   position,
   rotation,
   angularVelocity,
-  time,
   playerRef,
   obstacles,
-  quality = 3,
 }) => {
   // Get the wheel data
-  const [wheels, wheelData] = useWheels();
+  const [wheels, wheelInfos] = useWheels();
 
   const [, api] = useRaycastVehicle(
     () => ({
       chassisBody: chassisRef,
       wheels,
-      wheelData,
+      wheelInfos,
       indexForwardAxis: 2,
       indexRightAxis: 0,
       indexUpAxis: 1,
     }),
     vehicleRef,
   );
-
-  console.log('api', api);
 
   return (
     <group ref={vehicleRef} api={api}>
@@ -49,10 +45,8 @@ const Vehicle = ({
         rotation={rotation}
         position={position}
         angularVelocity={angularVelocity}
-        time={time}
         playerRef={playerRef}
         obstacles={obstacles}
-        quality={quality}
       />
       <Wheel ref={wheels[0]} leftSide />
       <Wheel ref={wheels[1]} />

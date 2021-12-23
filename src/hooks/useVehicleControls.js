@@ -13,7 +13,7 @@ export const useVehicleControls = (
   setGauges,
   selectedVertex,
   currentDNA,
-  useAICar,
+  useAIEngine,
 ) => {
   const resetPosition = React.useCallback(() => {
     chassisRef.current.api.position.set(147.5, 4, 192.5);
@@ -40,5 +40,5 @@ export const useVehicleControls = (
     resetPosition();
     // if (!currentDNA) return;
     // playerRef.current.updateDNA?.(currentDNA);
-  }, [playerRef, currentDNA, resetPosition, useAICar]);
+  }, [playerRef, currentDNA, resetPosition, useAIEngine]);
 };

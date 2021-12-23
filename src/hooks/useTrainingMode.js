@@ -8,7 +8,7 @@ export const useTrainingMode = () => {
     training: trainingMode,
     enableCameraLock,
     mouseMode,
-    disableAICar,
+    disableAIEngine,
     removeObstacles,
     addObstacles,
     updateGhosts,
@@ -18,7 +18,7 @@ export const useTrainingMode = () => {
   if (!trainingMode) {
     enableCameraLock();
     mouseMode();
-    disableAICar();
+    disableAIEngine();
     removeObstacles();
     addObstacles(false);
   } else {
