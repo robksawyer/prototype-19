@@ -50,7 +50,7 @@ export const useStore = create(set => ({
   time: 'sunset',
   obstacles: [],
   AICar: false,
-  helpOpen: false,
+  isPaused: false,
 
   // training
   currentDna: null,
@@ -146,9 +146,9 @@ export const useStore = create(set => ({
       AICar: false,
     })),
 
-  toggleHelpOpen: value =>
+  toggleIsPaused: value =>
     set(state => ({
-      helpOpen: !state.helpOpen,
+      helpOpen: !state.isPaused,
     })),
 
   // training

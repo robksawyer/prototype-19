@@ -237,11 +237,7 @@ const MainScene = ({
             <color attach="background" args={['#001e4d']} />
             <fog args={['#101010', 10, 20]} />
 
-            <Controls
-              cameraLock={cameraLock}
-              player={player}
-              isPaused={isPaused}
-            />
+            <Controls player={player} />
 
             <React.Suspense
               fallback={

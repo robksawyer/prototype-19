@@ -2,9 +2,11 @@
  * @file Controls.js
  */
 import * as React from 'react';
-import { extend, useFrame, useThree, invalidate } from '@react-three/fiber';
-import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
 import * as THREE from 'three';
+import { extend, useFrame, useThree, invalidate } from '@react-three/fiber';
+import { TrackballControls } from 'three-stdlib';
+
+import { useStore } from '@/store';
 
 import { useAnimatedMovement } from './cameraMovements';
 
@@ -15,7 +17,8 @@ import styles from './Controls.module.css';
 // extend THREE to include TrackballControls
 extend({ TrackballControls });
 
-const Controls = ({ cameraLock, player, isPaused }) => {
+const Controls = ({ player }) => {
+  const { cameraLock, isPaused } = useStore();
   const controls = React.useRef();
   const { camera, gl } = useThree();
 
