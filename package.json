@@ -36,7 +36,8 @@
     "three-stdlib": "^2.6.1",
     "use-error-boundary": "^2.0.4",
     "use-mobile-detect-hook": "^1.0.3",
-    "use-tweaks": "^0.1.0"
+    "use-tweaks": "^0.1.0",
+    "zustand": "^3.6.7"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",

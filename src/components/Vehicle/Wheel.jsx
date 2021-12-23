@@ -15,10 +15,11 @@ function WheelModel(props) {
     </group>
   );
 }
+
 useGLTF.preload('/3d/models/wheel.glb');
 
 // A Wheel
-const Wheel = forwardRef(function useWheel({ leftSide }, ref) {
+const Wheel = forwardRef(function ({ leftSide }, ref) {
   useCylinder(
     () => ({
       mass: 1,
