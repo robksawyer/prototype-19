@@ -6,11 +6,9 @@ import React, { useRef } from 'react';
 
 import { useGLTF } from '@react-three/drei';
 
-import Aston from '/3d/models/aston.glb';
-
 export default function Model(props) {
   const group = useRef();
-  const { nodes, materials } = useGLTF(Aston);
+  const { nodes, materials } = useGLTF('/3d/models/aston.glb');
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh
@@ -160,4 +158,4 @@ export default function Model(props) {
     </group>
   );
 }
-useGLTF.preload(Aston);
+useGLTF.preload('/3d/models/aston.glb');

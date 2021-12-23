@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 import Vehicle from '@/components/Vehicle';
 
-// import { useSubscriptions } from "@/hooks/useSubscriptions";
+import { useSubscriptions } from '@/hooks/useSubscriptions';
 import { useVehicleControls } from '@/hooks/useVehicleControls';
 
 import styles from './Player.module.css';
@@ -26,11 +26,11 @@ const Player = ({
   useAICar,
   quality = 3,
 }) => {
-  const playerRef = useRef(player);
+  const playerRef = React.useRef(player);
 
-  const chassisRef = useRef();
-  const followCameraRef = useRef();
-  const vehicleRef = useRef();
+  const chassisRef = React.useRef();
+  const followCameraRef = React.useRef();
+  const vehicleRef = React.useRef();
 
   useSubscriptions(playerRef, chassisRef);
 

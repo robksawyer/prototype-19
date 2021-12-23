@@ -5,11 +5,8 @@ import React, { forwardRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useCylinder } from '@react-three/cannon';
 
-// The model
-import WheelObject from '/3d/models/wheel.glb';
-
 function WheelModel(props) {
-  const { nodes, materials } = useGLTF(WheelObject);
+  const { nodes, materials } = useGLTF('/3d/models/wheel.glb');
   return (
     <group {...props} dispose={null}>
       <mesh material={materials.Rubber} geometry={nodes.wheel_1.geometry} />
@@ -18,7 +15,7 @@ function WheelModel(props) {
     </group>
   );
 }
-useGLTF.preload(WheelObject);
+useGLTF.preload('/3d/models/wheel.glb');
 
 // A Wheel
 const Wheel = forwardRef(function useWheel({ leftSide }, ref) {

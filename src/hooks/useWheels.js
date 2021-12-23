@@ -5,81 +5,87 @@
  */
 import * as React from 'react';
 
-export const useWheels = ({
+const DEFAULT_SETTINGS = {
   // chassis - wheel connection helpers
-  chassisWidth = 1.6,
-  chassisHeight = -0.15, // ground clearance
-  chassisFront = 1.3,
-  chassisBack = -1.35,
-
-  wheelDetail = {
+  chassis: {
+    width: 1.6,
+    height: -0.15, // ground clearance
+    front: 1.3,
+    back: -1.35,
+  },
+  suspension: {
+    stiffness: 30,
+    restLength: 0.3,
+    maxForce: 1e4,
+    maxTravel: 0.3,
+  },
+  damping: {
+    relaxation: 2.3,
+    compression: 4.4,
+  },
+  wheel: {
     radius: 0.3,
     directionLocal: [0, -1, 0], // same as Physics gravity
-    suspensionStiffness: 30,
-    suspensionRestLength: 0.3,
-    maxSuspensionForce: 1e4,
-    maxSuspensionTravel: 0.3,
-    dampingRelaxation: 2.3,
-    dampingCompression: 4.4,
+    chassisConnectionPointLocal: [1, 0, 1],
+    axleLocal: [-1, 0, 0], // wheel rotates around X-axis, invert if wheels rotate the wrong way
     frictionSlip: 5,
     rollInfluence: 0.01,
-    axleLocal: [-1, 0, 0], // wheel rotates around X-axis, invert if wheels rotate the wrong way
-    chassisConnectionPointLocal: [1, 0, 1],
     isFrontWheel: false,
     useCustomSlidingRotationalSpeed: true,
     customSlidingRotationalSpeed: -30,
   },
-}) => {
+};
+
+export const useWheels = (wheelDetail = DEFAULT_SETTINGS) => {
   const wheel_1 = React.useRef();
   const wheel_2 = React.useRef();
   const wheel_3 = React.useRef();
   const wheel_4 = React.useRef();
+
+  const { chassis, suspension, damping, wheel } = wheelDetail;
+  const { width, height, front, back } = chassis;
 
   // wheels
   const wheels = React.useMemo(() => [wheel_1, wheel_2, wheel_3, wheel_4], []);
   const wheelData = React.useMemo(() => {
     // FrontLeft [-X,Y,Z]
     const wheelDetail_1 = {
-      ...wheelDetail,
-      chassisConnectionPointLocal: [
-        -chassisWidth / 2,
-        chassisHeight,
-        chassisFront,
-      ],
+      ...wheel,
+      ...chassis,
+      ...damping,
+      ...suspension,
+      chassisConnectionPointLocal: [-width / 2, height, front],
       isFrontWheel: true,
     };
     // FrontRight [X,Y,Z]
     const wheelDetail_2 = {
-      ...wheelDetail,
-      chassisConnectionPointLocal: [
-        chassisWidth / 2,
-        chassisHeight,
-        chassisFront,
-      ],
+      ...wheel,
+      ...chassis,
+      ...damping,
+      ...suspension,
+      chassisConnectionPointLocal: [width / 2, height, front],
       isFrontWheel: true,
     };
     // BackLeft [-X,Y,-Z]
     const wheelDetail_3 = {
-      ...wheelDetail,
-      chassisConnectionPointLocal: [
-        -chassisWidth / 2,
-        chassisHeight,
-        chassisBack,
-      ],
+      ...wheel,
+      ...chassis,
+      ...damping,
+      ...suspension,
+      chassisConnectionPointLocal: [-width / 2, height, back],
       isFrontWheel: false,
     };
     // BackRight [X,Y,-Z]
     const wheelDetail_4 = {
-      ...wheelDetail,
-      chassisConnectionPointLocal: [
-        chassisWidth / 2,
-        chassisHeight,
-        chassisBack,
-      ],
+      ...wheel,
+      ...chassis,
+      ...damping,
+      ...suspension,
+      chassisConnectionPointLocal: [width / 2, height, back],
       isFrontWheel: false,
     };
     return [wheelDetail_1, wheelDetail_2, wheelDetail_3, wheelDetail_4];
-  }, [chassisBack, chassisFront, chassisHeight, chassisWidth, wheelDetail]);
+  }, [damping, suspension, wheel, chassis, width, height, front, back]);
 
   return [wheels, wheelData];
 };

@@ -11,7 +11,7 @@ import { useFrame } from '@react-three/fiber';
  * @returns
  */
 function useKeyPress(target, mode) {
-  const [keyPressed, setKeyPressed] = useState(false);
+  const [keyPressed, setKeyPressed] = React.useState(false);
 
   // If pressed key is our target key then set to true
   const downHandler = e => {

@@ -9,6 +9,9 @@ import useErrorBoundary from 'use-error-boundary';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Physics, Debug, usePlane } from '@react-three/cannon';
 
+import Engine from '@/components/Vehicle/Engine';
+import AIEngine from '@/components/Vehicle/AI/AIEngine';
+
 import {
   useHelper,
   Html,
@@ -33,12 +36,11 @@ import * as STDLIB from 'three-stdlib';
 
 import styles from './MainScene.module.css';
 
-import Controls from './Controls/Controls';
-
 import Loader from '@/components/Loader';
 import FoilBalloonZero from './FoilBalloonZero';
 import FoilBalloonTwo from './FoilBalloonTwo';
 import LamboUrus from '@/components/LamboUrus';
+import Controls from '@/components/Controls';
 import Player from '@/components/Player';
 
 // Shader stack
@@ -75,7 +77,13 @@ const Floor = props => {
   );
 };
 
-const Scene = () => {
+const Scene = ({
+  player,
+  time = 'sunset',
+  mode = 'keyboard',
+  obstacles = [],
+  quality = 3,
+}) => {
   const mesh = React.useRef();
   const { scene, size } = useThree();
 
@@ -87,11 +95,8 @@ const Scene = () => {
 
   // Vehicle
   const useAICar = false;
-  const [selectedVertex, setSelectedVertex] = useState(null);
-  const player = useMemo(
-    () => (useAICar ? new AICar() : new Car()),
-    [useAICar],
-  );
+  const [selectedVertex, setSelectedVertex] = React.useState(null);
+
   const onSetGauges = _.throttle(value => {
     console.log('value', value);
   }, 200);
@@ -169,10 +174,10 @@ const Scene = () => {
           player={player}
           selectedVertex={selectedVertex}
           mode={mode}
-          currentDNA={currentDNA}
+          // currentDNA={currentDNA}
           setGauges={onSetGauges}
-          time={'sunset'}
-          obstacles={[]}
+          time={time}
+          obstacles={obstacles}
           useAICar={useAICar}
           quality={quality}
         />
@@ -197,8 +202,16 @@ const Clouds = () => {
 const MainScene = ({
   className = 'fixed top-0 left-0 w-screen h-screen',
   variant = 'default',
+  cameraLock = false,
+  isPaused = false,
+  useAICar = false,
 }) => {
   const { ErrorBoundary, didCatch, error } = useErrorBoundary();
+
+  const player = React.useMemo(
+    () => (useAICar ? new AIEngine() : new Engine()),
+    [useAICar],
+  );
 
   return (
     <main
@@ -247,7 +260,7 @@ const MainScene = ({
                 zoom={0.7}
                 polar={[-0.1, Math.PI / 4]}
               >
-                <Scene />
+                <Scene useAICar={useAICar} player={player} />
               </PresentationControls>
 
               <Environment path="/3d/models/lambo_urus/textures/cube" />
