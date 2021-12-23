@@ -137,7 +137,7 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
     } else {
       movement.current = 'reset';
     }
-  }, [cameraLock, camera, controls, player]);
+  }, [cameraLock, camera, controls, player.position]);
 
   useFrame(() => {
     if (!movement.current) return;
