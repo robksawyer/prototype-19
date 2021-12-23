@@ -12,13 +12,13 @@ import Vertex from './helpers/vertex.js';
 export const map = new Graph({ directed: true });
 
 /**
- * setupVertices
+ * setuppoints
  * @param {*} idCounter
  * @param {*} x
  * @param {*} z
  * @returns
  */
-const setupVertices = (idCounter, x, z) => {
+const setuppoints = (idCounter, x, z) => {
   let vertexA = new Vertex(idCounter + 'A', x, z);
   let vertexB = new Vertex(idCounter + 'B', x + 5, z);
   let vertexC = new Vertex(idCounter + 'C', x, z + 5);
@@ -28,17 +28,17 @@ const setupVertices = (idCounter, x, z) => {
 
 /**
  * setupEdges
- * @param {*} verticesMap
+ * @param {*} pointsMap
  * @param {*} i
  * @param {*} j
  */
-const setupEdges = (verticesMap, i, j) => {
-  const [a, b, c, d] = verticesMap[i][j];
+const setupEdges = (pointsMap, i, j) => {
+  const [a, b, c, d] = pointsMap[i][j];
   const type = formattedTiles[i][j];
-  const rightA = verticesMap[i][j + 1][0];
-  const rightC = verticesMap[i][j + 1][2];
-  const downA = verticesMap[i + 1][j][0];
-  const downB = verticesMap[i + 1][j][1];
+  const rightA = pointsMap[i][j + 1][0];
+  const rightC = pointsMap[i][j + 1][2];
+  const downA = pointsMap[i + 1][j][0];
+  const downB = pointsMap[i + 1][j][1];
 
   switch (type) {
     case 'HR':
@@ -145,24 +145,24 @@ const connectDownTile = (d, downB, downA, c) => {
   map.addEdge(downA, c);
 };
 
-const verticesMap = [];
+const pointsMap = [];
 let idCounter = 1;
 
 /**
- * setup vertices. We will split each tile into 4 vertices.
+ * setup points. We will split each tile into 4 points.
  * This allows us to have two lanes of traffic and crossroads etc.
  */
 for (let i = 0; i < formattedTiles.length; i++) {
-  verticesMap.push([]);
+  pointsMap.push([]);
   for (let j = 0; j < formattedTiles[0].length; j++) {
     let type = formattedTiles[i][j];
     if (!type) {
-      verticesMap[i].push(0);
+      pointsMap[i].push(0);
       continue;
     }
-    const newVertices = setupVertices(idCounter, j * 10, i * 10);
-    newVertices.forEach(vertex => map.addVertex(vertex));
-    verticesMap[i].push(newVertices);
+    const newpoints = setuppoints(idCounter, j * 10, i * 10);
+    newpoints.forEach(vertex => map.addVertex(vertex));
+    pointsMap[i].push(newpoints);
     idCounter++;
   }
 }
@@ -172,10 +172,10 @@ for (let i = 0; i < formattedTiles.length; i++) {
  */
 for (let i = 0; i < formattedTiles.length; i++) {
   for (let j = 0; j < formattedTiles[0].length; j++) {
-    if (verticesMap[i][j]) {
-      setupEdges(verticesMap, i, j);
+    if (pointsMap[i][j]) {
+      setupEdges(pointsMap, i, j);
     }
   }
 }
 
-map.lookup = verticesMap;
+map.lookup = pointsMap;

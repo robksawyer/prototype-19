@@ -4,6 +4,7 @@
  */
 import * as THREE from 'three';
 import * as d3 from 'd3-ease';
+
 import pathfinding from './pathfinding/pathfinder';
 import { getCurve } from './ellipseCurve';
 import { path } from './path';
@@ -15,7 +16,7 @@ const RADIUS = 2.5;
 export default class Engine {
   constructor() {
     this.map = map.graphObj;
-    this.verticesLookup = map.lookup;
+    this.pointsLookup = map.lookup;
     this.stepCount = 10;
     this.arrayOfSteps = path.slice();
     this.target = new THREE.Vector2();
@@ -58,7 +59,7 @@ export default class Engine {
     }
 
     if (this.pathGeometry) {
-      this.pathGeometry.setVertices(this.arrayOfSteps);
+      this.pathGeometry.setPoints(this.arrayOfSteps);
     }
 
     const maxSpeed = this.approachingEnd()
@@ -370,7 +371,7 @@ export default class Engine {
    */
   clearPath() {
     this.arrayOfSteps = [];
-    this.pathGeometry.setVertices(this.arrayOfSteps);
+    this.pathGeometry.setPoints(this.arrayOfSteps);
   }
 
   /**
@@ -383,7 +384,7 @@ export default class Engine {
     const end = this.findVertex(target.x, target.z);
     if (!start || !end || start === end) return;
     this.runPathfinding(start, end);
-    this.pathGeometry.setVertices(this.arrayOfSteps);
+    this.pathGeometry.setPoints(this.arrayOfSteps);
     this.slowDown = false;
   }
 
@@ -398,20 +399,20 @@ export default class Engine {
     const z = (mapZ - 5) / 10;
     const i = Math.ceil(z);
     const j = Math.ceil(x);
-    const vertices = this.verticesLookup[i][j];
-    if (!vertices) return;
+    const points = this.pointsLookup[i][j];
+    if (!points) return;
 
     const remainderX = x % 1;
     const remainderZ = z % 1;
     switch (true) {
       case remainderX <= 0.5 && remainderZ <= 0.5:
-        return vertices[0].value;
+        return points[0].value;
       case remainderX > 0.5 && remainderZ <= 0.5:
-        return vertices[1].value;
+        return points[1].value;
       case remainderX <= 0.5 && remainderZ > 0.5:
-        return vertices[2].value;
+        return points[2].value;
       case remainderX > 0.5 && remainderZ > 0.5:
-        return vertices[3].value;
+        return points[3].value;
       default:
         break;
     }

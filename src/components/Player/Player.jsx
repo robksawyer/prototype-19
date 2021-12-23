@@ -4,8 +4,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-// import PlayerPath from "./Path/PlayerPath";
-
+import PlayerPath from './Path/PlayerPath';
 // import ClickIndicator from "./ClickVisuals";
 
 import Vehicle from '@/components/Vehicle';
@@ -64,7 +63,7 @@ const Player = ({
         obstacles={obstacles}
         quality={quality}
       />
-      {/* <PlayerPath player={player} /> */}
+      <PlayerPath player={player} />
       {/* <ClickIndicator selectedVertex={selectedVertex} /> */}
     </>
   );

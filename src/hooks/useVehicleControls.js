@@ -24,7 +24,7 @@ export const useVehicleControls = (
 
   const clearPath = React.useCallback(() => {
     playerRef.current.arrayOfSteps = [];
-    playerRef.current.pathGeometry.setVertices([]);
+    playerRef.current.pathGeometry.setPoints([]);
   }, [playerRef]);
 
   const reset = React.useCallback(() => {
