@@ -25,7 +25,7 @@ export default function Chassis({
   const [target, setTarget] = React.useState(undefined);
   const { vehicleDimensions: boxSize, quality, obstacles, time } = useStore();
 
-  useHelper(chassisRef, THREE.BoxHelper, '#ff0000');
+  // useHelper(chassisRef, THREE.BoxHelper, '#ff0000');
 
   const [, api] = useBox(
     () => ({
@@ -53,7 +53,7 @@ export default function Chassis({
 
   return (
     <mesh ref={chassisRef} api={api}>
-      <Radar playerRef={playerRef} obstacles={obstacles} />
+      {/* <Radar playerRef={playerRef} obstacles={obstacles} /> */}
       {/* {quality === 3 ? (
         <AstonHQ position={[0, -0.7, 0]} scale={0.01} />
       ) : (

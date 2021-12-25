@@ -72,21 +72,25 @@ function WheelModel(props) {
 
 useGLTF.preload('/3d/models/lambo_urus/lambo_urus.glb');
 
-const Wheel = React.forwardRef(({ leftSide }, ref) => {
-  useHelper(ref, THREE.BoxHelper, '#00ff00');
+const Wheel = React.forwardRef(function useW(
+  { radius = 0.8, leftSide, ...props },
+  ref,
+) {
+  //   useHelper(ref, THREE.BoxHelper, '#00ff00');
 
   useCylinder(
     () => ({
       mass: 1,
       type: 'Kinematic',
       collisionFilterGroup: 0,
-      rotation: [0, Math.PI / 2, 0],
+      args: [radius, radius, 0.7, 16],
+      ...props,
     }),
     ref,
   );
 
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} castShadow>
       <mesh rotation={[0, 0, ((leftSide ? 1 : -1) * Math.PI) / 2]}>
         <WheelModel
           scale={[0.01, 0.01, 0.01]}
