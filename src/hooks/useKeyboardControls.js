@@ -57,6 +57,12 @@ export const useKeyboardControls = (vehicleRef, resetPosition, clearPath) => {
     }
     if (mode !== 'keyboard' || !vehicleRef.current?.api) return;
 
+    // if (chassisRef.current.position.y <= -192) {
+    //   resetPosition();
+    //   clearPath();
+    //   return;
+    // }
+
     let steering = 0;
     let braking = 0;
     let engine = 0;

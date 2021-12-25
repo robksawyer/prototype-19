@@ -43,7 +43,7 @@ export const useStore = create(set => ({
 
   // settings
   trafficLights: false,
-  cameraLock: true, // flow the vehicle
+  cameraLock: undefined, // flow the vehicle
   collisionBoxes: false,
   computerNumber: 60,
   trafficConditions: false,

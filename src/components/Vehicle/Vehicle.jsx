@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import { useRaycastVehicle } from '@react-three/cannon';
 
 import Chassis from './Chassis';
-import Wheel from './Wheel';
 
+import Wheel from '@/components/LamboUrus/Wheel';
 import { useWheels } from '@/hooks/useWheels';
 
 import styles from './Vehicle.module.css';

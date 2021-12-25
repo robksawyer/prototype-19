@@ -11,48 +11,45 @@
 
 import * as React from 'react';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 
 import styles from './LamboUrus.module.css';
-
-import { useLayoutEffect } from '@/hooks/useIsoLayoutEffect';
-import { useControls } from '@/hooks/useControls';
 
 export default function LamboUrus(props) {
   const group = React.useRef();
   const brakeDisc0 = React.useRef();
   const { nodes, materials } = useGLTF('/3d/models/lambo_urus/lambo_urus.glb');
 
-  const { forward, backward, left, right, jump } = useControls();
+  // const { forward, backward, left, right, jump } = useControls();
 
-  const handleKeyDown = React.useCallback(({ key }) => {
-    console.log('key', key);
-  }, []);
+  // const handleKeyDown = React.useCallback(({ key }) => {
+  //   console.log('key', key);
+  // }, []);
 
-  useFrame(({ clock }) => {
-    const eT = clock.getElapsedTime();
-    if (forward) {
-      group.current.position.x += 0.35;
-    }
-    if (left) {
-      group.current.rotation.y -= 0.25;
-    }
-    if (backward) {
-      group.current.position.x -= 0.35;
-    }
-    if (right) {
-      group.current.rotation.y += 0.25;
-    }
-    // brakeDisc0.current.rotation.y += eT * 0.01;
-  });
+  // useFrame(({ clock }) => {
+  //   const eT = clock.getElapsedTime();
+  //   if (forward) {
+  //     group.current.position.x += 0.35;
+  //   }
+  //   if (left) {
+  //     group.current.rotation.y -= 0.25;
+  //   }
+  //   if (backward) {
+  //     group.current.position.x -= 0.35;
+  //   }
+  //   if (right) {
+  //     group.current.rotation.y += 0.25;
+  //   }
+  //   // brakeDisc0.current.rotation.y += eT * 0.01;
+  // });
 
   return (
-    <group ref={group} {...props} dispose={null} onKeyDown={handleKeyDown}>
+    <group ref={group} {...props}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group rotation={[0, 0, 0]}>
-            <group position={[0, 2.7, -119]} rotation={[0, 0, 0]}>
+            {/* Wheels */}
+            {/* <group position={[0, 2.7, -119]} rotation={[0, 0, 0]}>
               <group
                 position={[-88.64, -40.87, -16.14]}
                 rotation={[-Math.PI, 0, Math.PI]}
@@ -326,7 +323,7 @@ export default function LamboUrus(props) {
                   material={materials.TiresGum}
                 />
               </group>
-            </group>
+            </group> */}
             <group position={[0, 0, -119]} rotation={[0, 0, 0]}>
               <group
                 position={[0, -44.01, 65.81]}

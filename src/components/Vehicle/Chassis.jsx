@@ -6,6 +6,7 @@ import { useBox } from '@react-three/cannon';
 
 import AstonHQ from './AstonHQ';
 import AstonLQ from './AstonLQ';
+import LamboUrus from '@/components/LamboUrus';
 import Radar from './Radar/Radar';
 
 import { useStore } from '@/store';
@@ -49,11 +50,12 @@ export default function Chassis({
   return (
     <mesh ref={chassisRef} api={api}>
       <Radar playerRef={playerRef} obstacles={obstacles} />
-      {quality === 3 ? (
+      {/* {quality === 3 ? (
         <AstonHQ position={[0, -0.7, 0]} scale={0.01} />
       ) : (
         <AstonLQ position={[0, -0.7, 0]} scale={0.01} />
-      )}
+      )} */}
+      <LamboUrus position={[0, 0.2, 0]} scale={0.01} />
       <object3D ref={followCameraRef} position={[0, 3, -8]} />
       <object3D ref={spotlightTarget} position={[0, -2, 10]} />
       {time === 'night' && (

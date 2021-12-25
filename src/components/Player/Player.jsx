@@ -14,8 +14,6 @@ import { useVehicleControls } from '@/hooks/useVehicleControls';
 
 import styles from './Player.module.css';
 
-import { useStore } from '@/store';
-
 const Player = ({ selectedVertex, player }) => {
   const playerRef = React.useRef(player);
   const chassisRef = React.useRef();

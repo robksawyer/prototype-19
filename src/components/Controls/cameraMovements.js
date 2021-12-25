@@ -3,6 +3,7 @@
  */
 import * as React from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useCustomCompareEffect } from 'use-custom-compare';
 import * as d3 from 'd3-ease';
 
 const up = { x: 0, y: 1, z: 0 };
@@ -137,7 +138,7 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
     } else {
       movement.current = 'reset';
     }
-  }, [cameraLock, camera, controls, player.position]);
+  }, [cameraLock, camera, controls, player.position.x, player.position.y]);
 
   useFrame(() => {
     if (!movement.current) return;
@@ -150,6 +151,7 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
 
   /**
    * move
+   * Handles the orbitting controls of the user
    */
   const move = () => {
     if (linearProgress.current < 1) {
@@ -165,25 +167,29 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
       controls.current.target.set(...Object.values(parameters.current.target));
       camera.up.set(...Object.values(parameters.current.up));
     } else {
-      if (movement.current === 'move') movement.current = 'follow';
-      else movement.current = false;
+      if (movement.current === 'move') {
+        movement.current = 'follow';
+      } else {
+        movement.current = false;
+      }
     }
   };
 
   /**
    * follow
+   * Handles making the camera follow the vehicle.
    * @returns
    */
   const follow = () => {
     if (!player.followCam) return;
     camera.position.lerp(
       player.followCam.getWorldPosition(player.followCamVector),
-      0.03,
+      0.02,
     );
     camera.up.lerp(up, 0.03);
     controls.current.target.lerp(
       player.followCam.parent.getWorldPosition(player.chassisVector),
-      0.03,
+      0.02,
     );
   };
 }

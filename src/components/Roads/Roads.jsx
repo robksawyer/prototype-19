@@ -67,12 +67,8 @@ const Roads = ({
         position={[145, 0, 145]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
-        <planeBufferGeometry attach="geometry" args={[300, 300]} />
-        <meshStandardMaterial
-          map={roadsTexture}
-          attach="material"
-          transparent={true}
-        />
+        <planeBufferGeometry args={[300, 300]} />
+        <meshStandardMaterial map={roadsTexture} transparent={true} />
       </mesh>
     </>
   );

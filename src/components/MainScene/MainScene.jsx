@@ -6,7 +6,7 @@ import * as THREE from 'three';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import useErrorBoundary from 'use-error-boundary';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import { Physics, Debug, usePlane } from '@react-three/cannon';
 import {
   useHelper,
@@ -190,6 +190,7 @@ const MainScene = ({
     addObstacles,
     enableCameraLock,
     cameraLock,
+    disableAIEngine,
   } = useStore();
 
   // Vehicle
@@ -212,6 +213,13 @@ const MainScene = ({
     [useAIEngine],
   );
 
+  useLayoutEffect(() => {
+    if (cameraLock === undefined) {
+      enableCameraLock();
+      disableAIEngine();
+    }
+  }, [cameraLock, enableCameraLock, disableAIEngine]);
+
   return (
     <main
       className={`${styles.main_scene} ${
@@ -228,6 +236,9 @@ const MainScene = ({
           camera={{ fov: 4000, position: [0, 6, -15] }}
           performance={{ min: 0.2 }}
           frameloop={'on demand'}
+          style={{
+            background: '#000000',
+          }}
         >
           <Physics
             gravity={[0, -10, 0]}
@@ -236,17 +247,16 @@ const MainScene = ({
             shouldInvalidate={false}
           >
             <Stats showPanel={0} className="ml-0" />
-            <Debug color="black" scale={1.1} />
-            <color attach="background" args={[0xa0a0a0]} />
+            {/* <Debug color="black" scale={1.1} /> */}
             <fog args={['#101010', 10, 20]} />
 
-            <Clouds />
-            <Sky
+            {/* <Clouds /> */}
+            {/* <Sky
               distance={450000}
               sunPosition={[0, 1, 0]}
               inclination={0}
               azimuth={0.25}
-            />
+            /> */}
 
             <Controls player={player} />
 
