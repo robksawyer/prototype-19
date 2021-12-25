@@ -59,7 +59,7 @@ export default function Chassis({
       ) : (
         <AstonLQ position={[0, -0.7, 0]} scale={0.01} />
       )} */}
-      <LamboUrus position={[0, 0.2, 0]} scale={0.01} />
+      <LamboUrus position={[0, 0, 0]} scale={0.01} />
       <object3D ref={followCameraRef} position={[0, 3, -8]} />
       <object3D ref={spotlightTarget} position={[0, -2, 10]} />
       {time === 'night' && (

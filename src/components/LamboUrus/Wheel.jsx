@@ -80,6 +80,7 @@ const Wheel = React.forwardRef(({ leftSide }, ref) => {
       mass: 1,
       type: 'Kinematic',
       collisionFilterGroup: 0,
+      rotation: [0, Math.PI / 2, 0],
     }),
     ref,
   );

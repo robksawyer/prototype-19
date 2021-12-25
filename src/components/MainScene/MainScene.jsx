@@ -213,12 +213,12 @@ const MainScene = ({
     [useAIEngine],
   );
 
-  useLayoutEffect(() => {
-    if (cameraLock === undefined) {
-      enableCameraLock();
-      disableAIEngine();
-    }
-  }, [cameraLock, enableCameraLock, disableAIEngine]);
+  // useLayoutEffect(() => {
+  //   if (cameraLock === undefined) {
+  //     enableCameraLock();
+  //     disableAIEngine();
+  //   }
+  // }, [cameraLock, enableCameraLock, disableAIEngine]);
 
   return (
     <main
