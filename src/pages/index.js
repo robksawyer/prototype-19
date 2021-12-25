@@ -1,17 +1,17 @@
-import React from 'react'
-import Head from 'next/head'
-import dynamic from 'next/dynamic'
-import styles from '../styles/Home.module.css'
+import React from 'react';
+import Head from 'next/head';
+import dynamic from 'next/dynamic';
+import styles from '../styles/Home.module.css';
 
 const MainScene = dynamic(() => import('@/components/MainScene'), {
   ssr: false,
-})
-import HamburgerMenu from '@/components/HamburgerMenu'
+});
+import HamburgerMenu from '@/components/HamburgerMenu';
 // import WaveText from '@/components/WaveText'
 
-const CursorCircle = dynamic(() => import('@/components/CursorCircle'), {
-  ssr: false,
-})
+// const CursorCircle = dynamic(() => import('@/components/CursorCircle'), {
+//   ssr: false,
+// });
 
 export default function Home() {
   return (
@@ -33,7 +33,7 @@ export default function Home() {
       >
         Powered by passion
       </footer>
-      <CursorCircle />
+      {/* <CursorCircle /> */}
     </div>
-  )
+  );
 }

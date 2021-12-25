@@ -32,6 +32,7 @@ export const useStore = create(set => ({
   loading: false,
 
   // IMPORTANT: Set the car's visual dimensions (roughly)
+  // This determines where the wheels
   vehicleDimensions: [1.7, 1, 4],
 
   gauges: null,

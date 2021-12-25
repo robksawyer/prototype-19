@@ -2,7 +2,9 @@
  * @file Chassis.jsx
  */
 import * as React from 'react';
-import { useBox } from '@react-three/cannon';
+import * as THREE from 'three';
+import { useBox, Debug } from '@react-three/cannon';
+import { useHelper } from '@react-three/drei';
 
 import AstonHQ from './AstonHQ';
 import AstonLQ from './AstonLQ';
@@ -22,6 +24,8 @@ export default function Chassis({
   const spotlightTarget = React.useRef();
   const [target, setTarget] = React.useState(undefined);
   const { vehicleDimensions: boxSize, quality, obstacles, time } = useStore();
+
+  useHelper(chassisRef, THREE.BoxHelper, '#ff0000');
 
   const [, api] = useBox(
     () => ({

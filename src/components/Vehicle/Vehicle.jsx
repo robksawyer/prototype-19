@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { useRaycastVehicle } from '@react-three/cannon';
+import { useRaycastVehicle, Debug } from '@react-three/cannon';
 
 import Chassis from './Chassis';
 
@@ -38,21 +38,23 @@ const Vehicle = ({
   );
 
   return (
-    <group ref={vehicleRef} api={api}>
-      <Chassis
-        chassisRef={chassisRef}
-        followCameraRef={followCameraRef}
-        rotation={rotation}
-        position={position}
-        angularVelocity={angularVelocity}
-        playerRef={playerRef}
-        obstacles={obstacles}
-      />
-      <Wheel ref={wheels[0]} leftSide />
-      <Wheel ref={wheels[1]} />
-      <Wheel ref={wheels[2]} leftSide />
-      <Wheel ref={wheels[3]} />
-    </group>
+    <Debug color="#00fff0" scale={0.5}>
+      <group ref={vehicleRef} api={api}>
+        <Chassis
+          chassisRef={chassisRef}
+          followCameraRef={followCameraRef}
+          rotation={rotation}
+          position={position}
+          angularVelocity={angularVelocity}
+          playerRef={playerRef}
+          obstacles={obstacles}
+        />
+        <Wheel ref={wheels[0]} leftSide />
+        <Wheel ref={wheels[1]} />
+        <Wheel ref={wheels[2]} leftSide />
+        <Wheel ref={wheels[3]} />
+      </group>
+    </Debug>
   );
 };
 

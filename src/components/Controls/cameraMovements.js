@@ -187,8 +187,10 @@ export function useAnimatedMovement({ controls, camera, cameraLock, player }) {
       0.02,
     );
     camera.up.lerp(up, 0.03);
+
+    if (!player.followCam?.parent) return;
     controls.current.target.lerp(
-      player.followCam.parent.getWorldPosition(player.chassisVector),
+      player.followCam?.parent?.getWorldPosition(player.chassisVector),
       0.02,
     );
   };
